@@ -10,14 +10,14 @@ pipeline {
                 stage('Build backend') {
                     steps {
                         dir('src/backend') {
-                            def backend = docker.build("massamplebackend")
+                            backend = docker.build("massamplebackend")
                         }
                     }
                 }
                 stage('Build frontend') {
                     steps {
                         dir('src/frontend') {
-                            def frontend = docker.build("massamplefrontend")
+                            frontend = docker.build("massamplefrontend")
                         }
                     }
                 }
