@@ -1,4 +1,4 @@
-FROM node:lts-buster-slim AS development
+FROM node:lts-alpine AS development
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -11,7 +11,7 @@ COPY . /usr/src/app
 
 EXPOSE 3000
 
-CMD [ "npm", "run", "dev" ]
+CMD [ "npm", "run", "start" ]
 
 #FROM development as dev-envs
 #RUN apt-get update
