@@ -32,7 +32,7 @@ pipeline {
     stage("ecrPush") {
       steps {
         script {
-          docker.withRegistry('063439157700.dkr.ecr.us-east-1.amazonaws.com', 'qtran') {
+          docker.withRegistry('063439157700.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:qtran') {
             backend.push("${env.BUILD_NUMBER}")
             backend.push("latest")
 
