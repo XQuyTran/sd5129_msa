@@ -1,35 +1,33 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend
+  name: backend
 spec:
   selector:
-    app: frontend
+    app: backend
   ports:
     - port: 3000
       protocol: TCP
       targetPort: 3000
-  type: ClusterIP
 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend
+  name: backend
 spec:
   selector:
     matchLabels:
-      app: frontend
+      app: backend
   replicas: 1
   template:
     metadata:
       labels:
-        app: frontend
+        app: backend
     spec:
       containers:
-        - name: frontend
-          image: hnguyencanh/frontend:latest
+        - name: backend
+          image: 063439157700.dkr.ecr.us-east-1.amazonaws.com/massamplebackend:10
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
-

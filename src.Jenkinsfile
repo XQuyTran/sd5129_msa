@@ -3,7 +3,7 @@ pipeline {
     label "private"
   }
   options {
-    timeout(time: 1, unit: 'HOURS')
+    timeout(time: 30, unit: 'MINUTES')
   }
   stages {
     stage('Build') {
