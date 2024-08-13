@@ -8,7 +8,6 @@ pipeline {
       agent {
         kubernetes {
           cloud 'kubernetes'
-          inheritFrom 'node'
           yaml '''
             apiVersion: v1
             kind: Pod
@@ -29,11 +28,14 @@ pipeline {
         }
       }
       steps {
-        dir('src/backend') {
-          script {
-            npm ci
-          }  
+        container('node') {
+          sh 'cd src/backend && npm ci'
         }
+        // dir('src/backend') {
+        //   script {
+        //     npm ci
+        //   }  
+        // }
       }
     }
   }
