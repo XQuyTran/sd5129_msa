@@ -20,6 +20,7 @@ pipeline {
               containers:
               - name: node
                 image: node:16.20.2-alpine
+                tty: true
                 resources:
                   limits:
                     memory: "2Gi"
