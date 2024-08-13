@@ -9,20 +9,21 @@ pipeline {
         kubernetes {
           cloud 'kubernetes'
           inheritFrom 'node'
-          yaml '''apiVersion: v1
-                  kind: Pod
-                  metadata:
-                    name: node-16
-                    labels:
-                      name: node-16
-                  spec:
-                    containers:
-                    - name: node
-                      image: node:16.20.2-alpine
-                      resources:
-                        limits:
-                          memory: "2Gi"
-                          cpu: "1"
+          yaml '''
+            apiVersion: v1
+            kind: Pod
+            metadata:
+              name: node-16
+              labels:
+                name: node-16
+            spec:
+              containers:
+              - name: node
+                image: node:16.20.2-alpine
+                resources:
+                  limits:
+                    memory: "2Gi"
+                    cpu: "1"
                 '''
         }
       }
