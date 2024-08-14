@@ -17,19 +17,26 @@ pipeline {
                 name: node-16
             spec:
               containers:
-              - name: node
-                image: node:16.20.2-alpine
+              - name: docker
+                image: docker:latest
                 tty: true
+                volumeMounts:
+                - mountPath: /var/run/docker.sock
+                  name: docker-sock
                 resources:
                   limits:
                     memory: "2Gi"
                     cpu: "1"
+              volumes:
+              - name: docker-sock
+                hostPath:
+                  path: /var/run/docker.sock
                 '''
         }
       }
       steps {
-        container('node') {
-          sh 'cd src/backend && npm ci'
+        container('docker') {
+          sh 'cd src/backend && docker build --tag ntg-garage-backend:latest .'
         }
         // dir('src/backend') {
         //   script {
