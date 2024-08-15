@@ -42,7 +42,7 @@ pipeline {
       steps {
         container('kaniko') {
           // sh 'cd src/backend && docker build --tag ntg-garage-backend:latest .'
-          sh "cd src/backend && /kaniko/executor --dockerfile=./Dockerfile --context=dir://`pwd` --no-push"
+          sh "cd src/backend && /kaniko/executor --dockerfile=./Dockerfile --context=dir://\$(pwd) --no-push"
         }
         // dir('src/backend') {
         //   script {
