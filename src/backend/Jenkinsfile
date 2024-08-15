@@ -19,7 +19,8 @@ pipeline {
                 image: gcr.io/kaniko-project/executor:debug
                 imagePullPolicy: Always
                 tty: true
-                command: /busybox/sh
+                command: 
+                - /busybox/sh
                 resources:
                   limits:
                     cpu: '1'
