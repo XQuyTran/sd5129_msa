@@ -12,31 +12,39 @@ pipeline {
             apiVersion: v1
             kind: Pod
             metadata:
-              name: node-16
-              labels:
-                name: node-16
+              name: kaniko
             spec:
               containers:
-              - name: docker
-                image: docker:latest
-                tty: true
-                volumeMounts:
-                - mountPath: /var/run/docker.sock
-                  name: docker-sock
+              - name: kaniko
+                image: gcr.io/kaniko-project/executor:debug
+                imagePullPolicy: always
                 resources:
                   limits:
-                    memory: "2Gi"
-                    cpu: "1"
-              volumes:
-              - name: docker-sock
-                hostPath:
-                  path: /var/run/docker.sock
+                    cpu: '1'
+                    memory: 2Gi
+                // volumeMounts:
+                // - name: kaniko-secret
+                //   mountPath: /secret
+                // env:
+                // - name: GOOGLE_APPLICATION_CREDENTIALS
+                //   value: /secret/kaniko-secret.json
+              restartPolicy: Never
+              // volumes:
+              // - name: kaniko-secret
+              //   secret:
+              //     secretName: kaniko-secret
                 '''
         }
       }
       steps {
-        container('docker') {
-          sh 'cd src/backend && docker build --tag ntg-garage-backend:latest .'
+        container('kaniko') {
+          // sh 'cd src/backend && docker build --tag ntg-garage-backend:latest .'
+          sh '''cd src/backend && 
+                /kaniko/executor 
+                  --dockerfile=./Dockerfile 
+                  --context=dir:///$(pwd)
+                  --destination=ntg-garage/backend:latest
+                  --no-push'''
         }
         // dir('src/backend') {
         //   script {
