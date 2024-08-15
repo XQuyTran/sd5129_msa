@@ -18,6 +18,7 @@ pipeline {
               - name: kaniko
                 image: gcr.io/kaniko-project/executor:debug
                 imagePullPolicy: Always
+                tty: true
                 resources:
                   limits:
                     cpu: '1'
@@ -39,12 +40,7 @@ pipeline {
       steps {
         container('kaniko') {
           // sh 'cd src/backend && docker build --tag ntg-garage-backend:latest .'
-          sh '''cd src/backend && \
-                /kaniko/executor \
-                  --dockerfile=./Dockerfile \
-                  --context=dir:///$(pwd) \
-                  --destination=ntg-garage/backend:latest \
-                  --no-push'''
+          sh 'cd src/backend && /kaniko/executor --dockerfile=./Dockerfile --context=dir:///$(pwd) --destination=ntg-garage/backend:latest --no-push'
         }
         // dir('src/backend') {
         //   script {
