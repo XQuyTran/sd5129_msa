@@ -34,14 +34,44 @@ pipeline {
       }
       steps {
         container('kaniko') {
-          // sh 'cd src/backend && docker build --tag ntg-garage-backend:latest .'
           sh "cd src/backend && /kaniko/executor --dockerfile ./Dockerfile --context dir://\$(pwd) --destination \${AWS_REGISTRY}/ntg-garage-backend:latest"
         }
-        // dir('src/backend') {
-        //   script {
-        //     npm ci
-        //   }  
-        // }
+      }
+    }
+    stage('Deploy') {
+      agent {
+        kubernetes {
+          cloud 'kubernetes'
+          yaml '''
+            apiVersion: v1
+            kind: Pod
+            metadata:
+              name: awscli
+            spec:
+              containers:
+              - name: awscli
+                image: amazon/aws-cli:latest
+                imagePullPolicy: Always
+                tty: true
+                command: 
+                - /bin/bash
+                resources:
+                  limits:
+                    cpu: '1'
+                    memory: 512Mi
+                  resources:
+                    cpu: '200m'
+                    memory: 256Mi
+                '''
+        }
+      }
+      steps {
+        container('awscli') {
+          sh '''curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" &&
+                chmod +x ./kubectl &&
+                aws eks update-kubeconfig --region ap-southeast-1 --name practicaldevops-cluster &&
+                ./kubectl apply -f deployment/backend.yaml -n services'''
+        }
       }
     }
   }
