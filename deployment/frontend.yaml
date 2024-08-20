@@ -9,8 +9,6 @@ spec:
     - port: 3000
       protocol: TCP
       targetPort: 3000
-  type: NodePort
-
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -27,8 +25,15 @@ spec:
         app: frontend
     spec:
       containers:
-        - name: frontend
-          image: 063439157700.dkr.ecr.us-east-1.amazonaws.com/massamplefrontend:10
-          imagePullPolicy: Always
-          ports:
-            - containerPort: 3000
+      - name: frontend
+        image: 063439157700.dkr.ecr.ap-southeast-1.amazonaws.com/ntg-garage-frontend:latest
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 3000
+        resources:
+        limits:
+          cpu: "1"
+          memory: "512Mi"
+        requests:
+          cpu: "100m"
+          memory: "128Mi"
