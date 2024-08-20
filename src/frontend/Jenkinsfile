@@ -76,7 +76,7 @@ pipeline {
           sh '''curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" &&
                 chmod +x ./kubectl &&
                 aws eks update-kubeconfig --region ap-southeast-1 --name practicaldevops-cluster &&
-                ./kubectl apply -f deployment/frontend.yaml -n services --kubeconfig /root/.aws/config'''
+                ./kubectl apply -f deployment/frontend.yaml -n services --kubeconfig /root/.kube/config'''
         }
       }
     }
