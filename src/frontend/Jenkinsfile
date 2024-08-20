@@ -68,20 +68,15 @@ pipeline {
                 '''
         }
       }
+      options {
+        skipDefaultCheckout()
+      }
       steps {
         container('awscli') {
-          sh '''cat <<EOF > /etc/yum.repos.d/kubernetes.repo
-                [kubernetes]
-                name=Kubernetes
-                baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
-                enabled=1
-                gpgcheck=1
-                repo_gpgcheck=1
-                gpgkey=https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-                EOF
-                yum install -y kubectl &&
+          sh '''curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" &&
+                chmod +x ./kubectl &&
                 aws eks update-kubeconfig --region ap-southeast-1 --name practicaldevops-cluster &&
-                kubectl apply -f deployment/frontend.yaml -n services'''
+                ./kubectl apply -f deployment/frontend.yaml -n services --kubeconfig /root/.aws/config'''
         }
       }
     }
