@@ -37,45 +37,45 @@ pipeline {
       }
       steps {
         container('kaniko') {
-          sh "cd src/frontend && /kaniko/executor --dockerfile ./Dockerfile --context dir://\$(pwd) --destination \${AWS_REGISTRY}/ntg-garage-frontend:latest"
+          sh "cd src/frontend && /kaniko/executor --dockerfile ./Dockerfile --context dir://\$(pwd) --destination \${AWS_REGISTRY}/ntg-garage-frontend:1.0"
         }
       }
     }
-    stage('Deploy') {
-      agent {
-        kubernetes {
-          cloud 'kubernetes'
-          yaml '''
-            apiVersion: v1
-            kind: Pod
-            metadata:
-              name: awscli
-            spec:
-              containers:
-              - name: awscli
-                image: amazon/aws-cli:latest
-                imagePullPolicy: Always
-                tty: true
-                command: 
-                - /bin/bash
-                resources:
-                  limits:
-                    cpu: '1'
-                    memory: 512Mi
-                  resources:
-                    cpu: '200m'
-                    memory: 256Mi
-                '''
-        }
-      }
-      steps {
-        container('awscli') {
-          sh '''curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" &&
-                chmod +x ./kubectl &&
-                aws eks update-kubeconfig --region ap-southeast-1 --name practicaldevops-cluster &&
-                ./kubectl apply -f deployment/frontend.yaml -n services'''
-        }
-      }
-    }
+    // stage('Deploy') {
+    //   agent {
+    //     kubernetes {
+    //       cloud 'kubernetes'
+    //       yaml '''
+    //         apiVersion: v1
+    //         kind: Pod
+    //         metadata:
+    //           name: awscli
+    //         spec:
+    //           containers:
+    //           - name: awscli
+    //             image: amazon/aws-cli:latest
+    //             imagePullPolicy: Always
+    //             tty: true
+    //             command: 
+    //             - /bin/bash
+    //             resources:
+    //               limits:
+    //                 cpu: '1'
+    //                 memory: 512Mi
+    //               resources:
+    //                 cpu: '200m'
+    //                 memory: 256Mi
+    //             '''
+    //     }
+    //   }
+    //   steps {
+    //     container('awscli') {
+    //       sh '''curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" &&
+    //             chmod +x ./kubectl &&
+    //             aws eks update-kubeconfig --region ap-southeast-1 --name practicaldevops-cluster &&
+    //             ./kubectl apply -f deployment/frontend.yaml -n services'''
+    //     }
+    //   }
+    // }
   }
 }
