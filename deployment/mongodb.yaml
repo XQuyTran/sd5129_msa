@@ -1,12 +1,12 @@
----
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: mongo-sc
-provisioner: kubernetes.io/aws-ebs
-parameters:
-  type: gp3
-volumeBindingMode: WaitForFirstConsumer
+# ---
+# apiVersion: storage.k8s.io/v1
+# kind: StorageClass
+# metadata:
+#   name: mongo-sc
+# provisioner: kubernetes.io/aws-ebs
+# parameters:
+#   type: gp3
+# volumeBindingMode: WaitForFirstConsumer
 
 ---
 apiVersion: v1
