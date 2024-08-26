@@ -1,0 +1,42 @@
+trigger:
+  - "*"
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+  - stage: build
+    displayName: Build
+    jobs:
+      - job: buildAndPush
+        displayName: Build and push image to ACR
+        steps:
+          - task: Docker@2
+            displayName: Docker build and push
+            inputs:
+              containerRegistry: practicalacr
+              repository: ntg-garage-frontend
+              command: buildAndPush
+              Dockerfile: 'src/frontend/Dockerfile'
+              buildContext: '**'
+              tags: '1.0'
+  - stage: deploy
+    displayName: Deploy
+    jobs:
+      - deployment: deploy
+        displayName: Deploy to AKS
+        environment: env
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self
+                - task: Kubernetes@1
+                  displayName: Deploy to AKS
+                  inputs:
+                    connectionType: Kubernetes Service Connection
+                    kubernetesServiceEndpoint: practicalcluster
+                    namespace: services
+                    command: apply
+                    arguments: '-f deployment/frontend-azure.yaml'
+              

@@ -26,8 +26,17 @@ spec:
         app: backend
     spec:
       containers:
-        - name: backend
-          image: 063439157700.dkr.ecr.us-east-1.amazonaws.com/massamplebackend:10
-          imagePullPolicy: Always
-          ports:
-            - containerPort: 3000
+      - name: backend
+        image: practicalacr.azurecr.io/ntg-garage-backend:1.0
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 3000
+        resources:
+          limits:
+            cpu: "1"
+            memory: "512Mi"
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+      imagePullSecrets:
+      - name: ecr-pull-secret
