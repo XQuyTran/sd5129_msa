@@ -34,7 +34,7 @@ pipeline {
       }
       steps {
         container('kaniko') {
-          sh "cd src/backend && /kaniko/executor --dockerfile ./Dockerfile --context dir://\$(pwd) --destination \${AWS_REGISTRY}/ntg-garage-backend:1.0"
+          sh "cd src/backend && /kaniko/executor --dockerfile ./Dockerfile --context dir://\$(pwd) --destination \${AWS_REGISTRY}/ntg-garage-backend:1.1"
         }
       }
     }
