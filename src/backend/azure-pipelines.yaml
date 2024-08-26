@@ -38,5 +38,5 @@ stages:
                     kubernetesServiceEndpoint: practicalcluster
                     namespace: services
                     command: apply
-                    arguments: '-f deployment/backend.yaml'
+                    arguments: '-f deployment/backend-azure.yaml'
               
